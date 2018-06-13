@@ -5,11 +5,14 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -37,10 +40,14 @@ import com.example.actor.repository.Actor;
 import com.example.actor.repository.ActorRepository;
 import com.example.actor.repository.Prefecture;
 import com.example.actor.repository.PrefectureRepository;
+import com.example.actor.repository.TestSessionForms;
 
 @Controller
 public class ActorController {
 	final static Logger logger = LoggerFactory.getLogger(ActorController.class);
+
+	@Autowired
+	HttpSession dataSession;
 
 	@Autowired
 	ActorRepository actorRepository;
@@ -75,6 +82,24 @@ public class ActorController {
 	@RequestMapping(value = "/actor/{id}", method = RequestMethod.GET)
 	public ModelAndView detail(@PathVariable Integer id) {
 		logger.debug("Actor + detail");
+
+		// セッションを取得
+		ActorForm actorFormSession = (ActorForm) dataSession.getAttribute("form");
+		if (null != actorFormSession) {
+			// セッションよりデータを取得して設定
+			logger.debug("Birthday = " + actorFormSession.getBirthday());
+		}
+		// セッションを取得(List)
+		TestSessionForms actorFormsSession = (TestSessionForms) dataSession.getAttribute("forms");
+		if (null != actorFormsSession) {
+			// セッションよりデータを取得して設定
+			actorFormsSession.getActorForms().forEach(s -> logger.debug(s.getHeight() + s.getBlood()));
+			// logger.debug("Birthday = " +
+			// actorFormsSession.getActorForms().get(0).getBirthday());
+		}
+		// セッションクリア
+		dataSession.invalidate();
+
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("Actor/detail");
 		Actor actor = actorRepository.findOne(id);
@@ -110,6 +135,23 @@ public class ActorController {
 	@RequestMapping(value = "/actor/save", method = RequestMethod.POST)
 	public String save(@Validated @ModelAttribute ActorForm form, BindingResult result, Model model) {
 		logger.debug("Actor + save");
+
+		// セッションへ保存
+		dataSession.setAttribute("form", form);
+		// セッションへ保存(List)
+		List<ActorForm> actorForms = new ArrayList<ActorForm>();
+		actorForms.add(form);
+		ActorForm form2 = new ActorForm();
+		form2.setBirthday("1999-9-9");
+		form2.setBirthplaceId("22");
+		form2.setBlood("B");
+		form2.setHeight("99");
+		form2.setName("BBB");
+		actorForms.add(form2);
+		TestSessionForms testSessionForms = new TestSessionForms();
+		testSessionForms.setActorForms(actorForms);
+		dataSession.setAttribute("forms", testSessionForms);
+
 		if (result.hasErrors()) {
 			String message = msg.getMessage("actor.validation.error", null, Locale.JAPAN);
 			model.addAttribute("errorMessage", message);
