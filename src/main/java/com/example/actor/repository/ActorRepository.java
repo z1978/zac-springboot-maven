@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ActorRepository extends JpaRepository<Actor, Integer> {
 
-  @Query("select a from Actor a where a.name like %:keyword% order by a.id asc")
-  List<Actor> findActors(@Param("keyword") String keyword);
+	@Query("select a from Actor a where a.name like %:keyword% order by a.id asc")
+	List<Actor> findActors(@Param("keyword") String keyword);
 
 }

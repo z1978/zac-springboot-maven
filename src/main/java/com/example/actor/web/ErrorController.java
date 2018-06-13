@@ -12,28 +12,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ErrorController {
-  final static Logger logger = LoggerFactory.getLogger(ErrorController.class);
+	final static Logger logger = LoggerFactory.getLogger(ErrorController.class);
 
-  @Bean
-  public EmbeddedServletContainerCustomizer containerCustomizer() {
-    return new EmbeddedServletContainerCustomizer() {
-      @Override
-      public void customize(ConfigurableEmbeddedServletContainer container) {
-        ErrorPage error404 = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404");
-        ErrorPage error500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500");
-        container.addErrorPages(error404, error500);
-      }
-    };
-  }
+	@Bean
+	public EmbeddedServletContainerCustomizer containerCustomizer() {
+		return new EmbeddedServletContainerCustomizer() {
+			@Override
+			public void customize(ConfigurableEmbeddedServletContainer container) {
+				ErrorPage error404 = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404");
+				ErrorPage error500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/500");
+				container.addErrorPages(error404, error500);
+			}
+		};
+	}
 
-  @RequestMapping("/error/404")
-  public String error404() {
-    return "Error/404";
-  }
+	@RequestMapping("/error/404")
+	public String error404() {
+		return "Error/404";
+	}
 
-  @RequestMapping("/error/500")
-  public String error500() {
-    return "Error/500";
-  }
+	@RequestMapping("/error/500")
+	public String error500() {
+		return "Error/500";
+	}
 
 }

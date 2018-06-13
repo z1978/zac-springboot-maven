@@ -14,29 +14,32 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Table(name = "prefecture")
 public class Prefecture {
 
-  @Id
-  @Column(name="id")
-  @GeneratedValue(strategy=GenerationType.AUTO)
-  private Integer id;
-  @Column(name="name", nullable=false)
-  private String name;
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	@Column(name = "name", nullable = false)
+	private String name;
 
-  public Integer getId() {
-    return id;
-  }
-  public void setId(Integer id) {
-    this.id = id;
-  }
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
-  }
+	public Integer getId() {
+		return id;
+	}
 
-  @Override
-  public String toString() {
-      return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
-  }
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+	}
 
 }
