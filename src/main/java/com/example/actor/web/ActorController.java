@@ -40,14 +40,20 @@ import com.example.actor.repository.Actor;
 import com.example.actor.repository.ActorRepository;
 import com.example.actor.repository.Prefecture;
 import com.example.actor.repository.PrefectureRepository;
+import com.example.actor.repository.SessionSample;
 import com.example.actor.repository.TestSessionForms;
 
 @Controller
 public class ActorController {
 	final static Logger logger = LoggerFactory.getLogger(ActorController.class);
 
+	// セッションへ保存(方法１)
+//	@Autowired
+//	HttpSession dataSession;
+	
+	// セッションへ保存(方法２)
 	@Autowired
-	HttpSession dataSession;
+	protected SessionSample sessionSample;
 
 	@Autowired
 	ActorRepository actorRepository;
@@ -83,22 +89,24 @@ public class ActorController {
 	public ModelAndView detail(@PathVariable Integer id) {
 		logger.debug("Actor + detail");
 
-		// セッションを取得
-		ActorForm actorFormSession = (ActorForm) dataSession.getAttribute("form");
-		if (null != actorFormSession) {
-			// セッションよりデータを取得して設定
-			logger.debug("Birthday = " + actorFormSession.getBirthday());
-		}
-		// セッションを取得(List)
-		TestSessionForms actorFormsSession = (TestSessionForms) dataSession.getAttribute("forms");
-		if (null != actorFormsSession) {
-			// セッションよりデータを取得して設定
-			actorFormsSession.getActorForms().forEach(s -> logger.debug(s.getHeight() + s.getBlood()));
-			// logger.debug("Birthday = " +
-			// actorFormsSession.getActorForms().get(0).getBirthday());
-		}
-		// セッションクリア
-		dataSession.invalidate();
+//		// セッションを取得(方法１)
+//		ActorForm actorFormSession = (ActorForm) dataSession.getAttribute("form");
+//		if (null != actorFormSession) {
+//			// セッションよりデータを取得して設定
+//			logger.debug("Birthday = " + actorFormSession.getBirthday());
+//		}
+//		// セッションを取得(方法１)(List)
+//		TestSessionForms actorFormsSession = (TestSessionForms) dataSession.getAttribute("forms");
+//		if (null != actorFormsSession) {
+//			// セッションよりデータを取得して設定
+//			actorFormsSession.getActorForms().forEach(s -> logger.debug(s.getHeight() + s.getBlood()));
+//			// logger.debug("Birthday = " +
+//			// actorFormsSession.getActorForms().get(0).getBirthday());
+//		}
+//		// セッションクリア
+//		dataSession.invalidate();
+		// セッションを取得(方法２)
+		logger.debug("Name = " + sessionSample.getMsg());
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("Actor/detail");
@@ -136,21 +144,28 @@ public class ActorController {
 	public String save(@Validated @ModelAttribute ActorForm form, BindingResult result, Model model) {
 		logger.debug("Actor + save");
 
-		// セッションへ保存
-		dataSession.setAttribute("form", form);
-		// セッションへ保存(List)
-		List<ActorForm> actorForms = new ArrayList<ActorForm>();
-		actorForms.add(form);
-		ActorForm form2 = new ActorForm();
-		form2.setBirthday("1999-9-9");
-		form2.setBirthplaceId("22");
-		form2.setBlood("B");
-		form2.setHeight("99");
-		form2.setName("BBB");
-		actorForms.add(form2);
-		TestSessionForms testSessionForms = new TestSessionForms();
-		testSessionForms.setActorForms(actorForms);
-		dataSession.setAttribute("forms", testSessionForms);
+//		// セッションへ保存(方法１)
+//		dataSession.setAttribute("form", form);
+//		// セッションへ保存(方法１)(List)
+//		List<ActorForm> actorForms = new ArrayList<ActorForm>();
+//		actorForms.add(form);
+//		ActorForm form2 = new ActorForm();
+//		form2.setBirthday("1999-9-9");
+//		form2.setBirthplaceId("22");
+//		form2.setBlood("B");
+//		form2.setHeight("99");
+//		form2.setName("BBB");
+//		actorForms.add(form2);
+//		TestSessionForms testSessionForms = new TestSessionForms();
+//		testSessionForms.setActorForms(actorForms);
+//		dataSession.setAttribute("forms", testSessionForms);
+		// セッションへ保存(方法２)
+		StringBuilder sb = new StringBuilder();
+	     sb.append("セッションの受け渡しテスト用：入力したIDは");
+	     sb.append(form.getName());
+	     sb.append("です。");
+	     sessionSample.setMsg(sb.toString());
+	     logger.debug("Name = " + sessionSample.getMsg());
 
 		if (result.hasErrors()) {
 			String message = msg.getMessage("actor.validation.error", null, Locale.JAPAN);
