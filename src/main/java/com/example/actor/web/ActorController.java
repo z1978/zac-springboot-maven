@@ -139,6 +139,16 @@ public class ActorController {
 		modelDump(model, "create");
 		return "Actor/create";
 	}
+	
+	@RequestMapping(value = "/actor/edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable Integer id, ActorForm form, Model model) {
+		logger.debug("Actor + edit");
+		Actor actor = actorRepository.findOne(id);
+		form.setName(actor.getName());
+		model.addAttribute("actor", actor);
+		modelDump(model, "edit");
+		return "Actor/edit";
+	}
 
 	@RequestMapping(value = "/actor/save", method = RequestMethod.POST)
 	public String save(@Validated @ModelAttribute ActorForm form, BindingResult result, Model model) {
