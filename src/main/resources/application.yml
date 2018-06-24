@@ -10,7 +10,7 @@ spring:
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/sample_db
+    url: jdbc:mysql://localhost/sample_db?useUnicode=true&characterEncoding=utf8
     username: test_user
     password: hogehoge
 # JPA (JpaBaseConfiguration, HibernateJpaAutoConfiguration)
