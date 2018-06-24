@@ -5,14 +5,12 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,7 +39,6 @@ import com.example.actor.repository.ActorRepository;
 import com.example.actor.repository.Prefecture;
 import com.example.actor.repository.PrefectureRepository;
 import com.example.actor.repository.SessionSample;
-import com.example.actor.repository.TestSessionForms;
 
 @Controller
 public class ActorController {
@@ -63,6 +60,10 @@ public class ActorController {
 
 	@Autowired
 	MessageSource msg;
+
+	// サービスクラスがＤＩされる。
+	@Autowired
+	RandomNumberService random;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -136,6 +137,10 @@ public class ActorController {
 	@RequestMapping(value = "/actor/create", method = RequestMethod.GET)
 	public String create(ActorForm form, Model model) {
 		logger.debug("Actor + create");
+		
+		Map<String, Integer> testRandom = random();
+		logger.debug(testRandom.get("value").toString());
+		
 		List<Prefecture> pref = prefectureRepository.findAll();
 		model.addAttribute("pref", pref);
 		modelDump(model, "create");
@@ -266,6 +271,13 @@ public class ActorController {
 		for (Entry<String, Object> entry : mm.entrySet()) {
 			logger.debug("key:{}, value:{}", entry.getKey(), entry.getValue().toString());
 		}
+	}
+
+	// 乱数をレスポンスとして返却する。
+	@RequestMapping("/random")
+	public Map<String, Integer> random() {
+		int value = random.zeroToNine();
+		return Collections.singletonMap("value", value);
 	}
 
 }
