@@ -55,6 +55,9 @@
               <td th:text="(${item.birthplaceId != null}? ${item.birthplaceId} + ':' : '') + (${item.pref != null }? ${item.pref.name} : '(unknown)')"></td>
               <td th:text="${item.updateAt}">1</td>
               <td>
+              	<a th:if="${item.blood == 'O'}" th:href="@{/hoge}">
+				    <button type="button"  class="btn btn-danger">取消</button>
+				</a>
                 <a class="btn btn-warning" href="/actor/delete/${item.id}" th:href="@{/actor/delete/{id}(id=${item.id})}">delete</a>
               </td>
             </tr>
