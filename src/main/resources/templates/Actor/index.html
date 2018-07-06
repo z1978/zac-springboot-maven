@@ -45,7 +45,7 @@
 
 						<tr th:each="item,iterStat : ${list}">
 							<!-- ここから条件で表示/非表示切り替え -->
-							<span th:if="${item.height !=175}">
+							<th:block th:if="${item.height !=175}">
 								<td><a class="btn btn-default" href="/actor/${item.id}" th:href="@{/actor/{id}(id=${item.id})}" th:text="${item.id}">1</a></td>
 								<td th:text="${item.name}">1</td>
 								<td th:text="${item.height != null}? ${item.height} : '-'">1</td>
@@ -56,7 +56,7 @@
 								<td><a th:if="${item.blood == 'O'}" th:href="@{/hoge}">
 										<button type="button" class="btn btn-danger">取消</button>
 								</a> <a class="btn btn-warning" href="/actor/delete/${item.id}" th:href="@{/actor/delete/{id}(id=${item.id})}">delete</a></td>
-							</span>
+							</th:block>
 							<!-- ここまで -->
 
 						</tr>
