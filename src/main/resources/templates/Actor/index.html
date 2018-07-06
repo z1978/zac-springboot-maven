@@ -45,8 +45,7 @@
 
 						<tr th:each="item,iterStat : ${list}">
 							<!-- ここから条件で表示/非表示切り替え -->
-							<th:block th:if="${item.height !=175}">
-								<td><a class="btn btn-default" href="/actor/${item.id}" th:href="@{/actor/{id}(id=${item.id})}" th:text="${item.id}">1</a></td>
+							<th:block th:if="${(item.blood == 'O') and (item.height ==173 or item.height ==175)}">								<td><a class="btn btn-default" href="/actor/${item.id}" th:href="@{/actor/{id}(id=${item.id})}" th:text="${item.id}">1</a></td>
 								<td th:text="${item.name}">1</td>
 								<td th:text="${item.height != null}? ${item.height} : '-'">1</td>
 								<td th:text="${item.blood != null}? ${item.blood} : '-'">1</td>
